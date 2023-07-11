@@ -1,0 +1,762 @@
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously, unused_field, depend_on_referenced_packages
+
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_signature_pad/flutter_signature_pad.dart';
+import 'dart:io';
+import 'dart:ui' as ui;
+
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart' as intl;
+import 'package:path_provider/path_provider.dart';
+
+class InfoPremisesPage extends StatefulWidget {
+  dynamic premises;
+
+  String? imagePath;
+
+  InfoPremisesPage({
+    super.key,
+    required this.premises,
+    required this.imagePath,
+  });
+
+  @override
+  State<InfoPremisesPage> createState() => _InfoPremisesPageState();
+}
+
+class _InfoPremisesPageState extends State<InfoPremisesPage> {
+  // //====================CONTROLER'S==================================
+  // TextEditingController _locationController = TextEditingController();
+  // TextEditingController _CleaningIssueController = TextEditingController();
+  // TextEditingController _structuralIssueController = TextEditingController();
+  // TextEditingController _accessIssueController = TextEditingController();
+  // TextEditingController _infestationController = TextEditingController();
+  // TextEditingController _observationController = TextEditingController();
+  // TextEditingController _preventiveController = TextEditingController();
+  // TextEditingController _curativeController = TextEditingController();
+  // TextEditingController reviewdateinput = TextEditingController();
+  // TextEditingController completiondateinput = TextEditingController();
+
+  // ///=============================GLOBAL KEY=============================
+  // late AutoCompleteTextField textField;
+  // GlobalKey<AutoCompleteTextFieldState<String>> locationkey = GlobalKey();
+  // GlobalKey<AutoCompleteTextFieldState<String>> cleaningkey = GlobalKey();
+  // GlobalKey<AutoCompleteTextFieldState<String>> accesskey = GlobalKey();
+  // GlobalKey<AutoCompleteTextFieldState<String>> structuralkey = GlobalKey();
+  // GlobalKey<AutoCompleteTextFieldState<String>> infestationkey = GlobalKey();
+  // GlobalKey<AutoCompleteTextFieldState<String>> observationkey = GlobalKey();
+  // GlobalKey<AutoCompleteTextFieldState<String>> preventivekey = GlobalKey();
+  // GlobalKey<AutoCompleteTextFieldState<String>> curativekey = GlobalKey();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //   print(widget.premises);
+
+    //   _locationController.text = widget.premises['location'];
+    //   _CleaningIssueController.text = widget.premises['cleaning'];
+    //   _accessIssueController.text = widget.premises['access'];
+    //   _structuralIssueController.text = widget.premises['structural'];
+    //   _infestationController.text = widget.premises['infestation'];
+    //   _observationController.text = widget.premises['obervations'];
+    //   _preventiveController.text = widget.premises['preventive'];
+    //   _curativeController.text = widget.premises['curative'];
+    //   reviewdateinput.text = widget.premises['review_date'];
+    //   completiondateinput.text = widget.premises['completion_date'];
+    //   _image = File(widget.premises['images']);
+    //   imageselected = true;
+    print(widget.premises);
+    widget.premises['premises'] == 'internal'
+        ? _checkbox1 = true
+        : _checkbox2 = true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+        onWillPop: () async {
+          final shouldExit = await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Confirmation'),
+              content: Text('Do you want to exit?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text('No'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text('Yes'),
+                ),
+              ],
+            ),
+          );
+
+          return shouldExit ?? false;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text("Edit Premises",
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            centerTitle: true,
+          ),
+          body: _buildPremisesForm(),
+        ));
+  }
+
+  Widget _buildPremisesForm() {
+    return GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
+            child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+
+                Image.file(widget.imagePath as File),
+
+                // if (_image != null)
+                //   RepaintBoundary(
+                //     key: _arrowKey,
+                //     child: Stack(
+                //       children: [
+                //         _image!.path != widget.premises['images']
+                //             ? Positioned(
+                //                 left: _arrowPosition.dx,
+                //                 top: _arrowPosition.dy,
+                //                 child: Draggable(
+                //                     feedback: Icon(
+                //                       Icons.arrow_forward,
+                //                       color: _arrowColor.withOpacity(0.7),
+                //                       size: 40,
+                //                     ),
+                //                     onDraggableCanceled: (velocity, offset) {
+                //                       setState(() {
+                //                         _arrowPosition =
+                //                             offset - Offset(20, 120);
+                //                       });
+                //                     },
+                //                     onDragStarted: () =>
+                //                         _startDragging(context),
+                //                     onDragEnd: (details) =>
+                //                         _stopDragging(context),
+                //                     onDragUpdate: (details) =>
+                //                         _dragging(context, details),
+                //                     child: Icon(
+                //                       Icons.arrow_forward,
+                //                       color: _arrowColor,
+                //                       size: 60,
+                //                     )),
+                //               )
+                //             : Container()
+                //       ],
+                //     ),
+                //   ),
+                // ElevatedButton(
+                //   onPressed: () => getImageFromCamera(),
+                //   child: Text('Select From Camera'),
+                // ),
+                // ElevatedButton(
+                //   onPressed: () => getImageFromgallery(),
+                //   child: Text('Select From Gallery'),
+                // ),
+                // !imageSaved
+                //     ? ElevatedButton(
+                //         onPressed: _saveEditedImage,
+                //         child: Text('Save'),
+                //       )
+                //     : Container(),
+
+                SizedBox(height: 10),
+                CheckboxListTile(
+                  title: Text('Internal Premises'),
+                  value: _checkbox1,
+                  onChanged: (value) {
+                    // _onCheckboxChanged(value!, 1);
+                  },
+                ),
+
+                CheckboxListTile(
+                  title: Text('External Premises'),
+                  value: _checkbox2,
+                  onChanged: (value) {
+                    // _onCheckboxChanged(value!, 2);
+                  },
+                ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
+                // textField = AutoCompleteTextField<dynamic>(
+                //   controller: _locationController,
+                //   key: locationkey,
+                //   clearOnSubmit: false,
+                //   suggestions: widget.locationList,
+                //   decoration: InputDecoration(
+                //     labelText: 'Location',
+                //     labelStyle: TextStyle(color: Colors.grey),
+                //     border: OutlineInputBorder(),
+                //   ),
+                //   itemFilter: (item, query) {
+                //     return item.toLowerCase().contains(query.toLowerCase());
+                //   },
+                //   itemSorter: (a, b) {
+                //     return a.compareTo(b);
+                //   },
+                //   itemSubmitted: (item) {
+                //     setState(() {
+                //       _locationController.text = item;
+                //     });
+                //   },
+                //   itemBuilder: (context, item) {
+                //     return ListTile(
+                //       title: Text(item),
+                //     );
+                //   },
+                // ),
+
+                // const SizedBox(
+                //   height: 10,
+                // ),
+
+                // textField = AutoCompleteTextField<dynamic>(
+                //   controller: _CleaningIssueController,
+                //   key: cleaningkey,
+                //   clearOnSubmit: false,
+                //   suggestions: widget.cleaningIssueList,
+                //   decoration: InputDecoration(
+                //     labelText: 'Cleaning Issue',
+                //     labelStyle: TextStyle(color: Colors.grey),
+                //     border: OutlineInputBorder(),
+                //   ),
+                //   itemFilter: (item, query) {
+                //     return item.toLowerCase().contains(query.toLowerCase());
+                //   },
+                //   itemSorter: (a, b) {
+                //     return a.compareTo(b);
+                //   },
+                //   itemSubmitted: (item) {
+                //     setState(() {
+                //       _CleaningIssueController.text = item;
+                //     });
+                //   },
+                //   itemBuilder: (context, item) {
+                //     return ListTile(
+                //       title: Text(item),
+                //     );
+                //   },
+                // ),
+
+                // const SizedBox(
+                //   height: 10,
+                // ),
+
+                // textField = AutoCompleteTextField<dynamic>(
+                //   controller: _structuralIssueController,
+                //   key: structuralkey,
+                //   clearOnSubmit: false,
+                //   suggestions: widget.structuralIssueList,
+                //   decoration: InputDecoration(
+                //     labelText: 'Structural Issue',
+                //     labelStyle: TextStyle(color: Colors.grey),
+                //     border: OutlineInputBorder(),
+                //   ),
+                //   itemFilter: (item, query) {
+                //     return item.toLowerCase().contains(query.toLowerCase());
+                //   },
+                //   itemSorter: (a, b) {
+                //     return a.compareTo(b);
+                //   },
+                //   itemSubmitted: (item) {
+                //     setState(() {
+                //       _structuralIssueController.text = item;
+                //     });
+                //   },
+                //   itemBuilder: (context, item) {
+                //     return ListTile(
+                //       title: Text(item),
+                //     );
+                //   },
+                // ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+
+                // textField = AutoCompleteTextField<dynamic>(
+                //   controller: _accessIssueController,
+                //   key: accesskey,
+                //   clearOnSubmit: false,
+                //   suggestions: widget.accessIssueList,
+                //   decoration: InputDecoration(
+                //     labelText: 'Access Issue',
+                //     labelStyle: TextStyle(color: Colors.grey),
+                //     border: OutlineInputBorder(),
+                //   ),
+                //   itemFilter: (item, query) {
+                //     return item.toLowerCase().contains(query.toLowerCase());
+                //   },
+                //   itemSorter: (a, b) {
+                //     return a.compareTo(b);
+                //   },
+                //   itemSubmitted: (item) {
+                //     setState(() {
+                //       _accessIssueController.text = item;
+                //     });
+                //   },
+                //   itemBuilder: (context, item) {
+                //     return ListTile(
+                //       title: Text(item),
+                //     );
+                //   },
+                // ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+
+                // textField = AutoCompleteTextField<dynamic>(
+                //   controller: _infestationController,
+                //   key: infestationkey,
+                //   clearOnSubmit: false,
+                //   suggestions: widget.infestationList,
+                //   decoration: InputDecoration(
+                //     labelText: 'Description of Pest Infestation',
+                //     labelStyle: TextStyle(color: Colors.grey),
+                //     border: OutlineInputBorder(),
+                //   ),
+                //   itemFilter: (item, query) {
+                //     return item.toLowerCase().contains(query.toLowerCase());
+                //   },
+                //   itemSorter: (a, b) {
+                //     return a.compareTo(b);
+                //   },
+                //   itemSubmitted: (item) {
+                //     setState(() {
+                //       _infestationController.text = item;
+                //     });
+                //   },
+                //   itemBuilder: (context, item) {
+                //     return ListTile(
+                //       title: Text(item),
+                //     );
+                //   },
+                // ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+
+                // textField = AutoCompleteTextField<dynamic>(
+                //   controller: _observationController,
+                //   key: observationkey,
+                //   clearOnSubmit: false,
+                //   suggestions: widget.observationList,
+                //   decoration: InputDecoration(
+                //     labelText: 'Any other Observations',
+                //     labelStyle: TextStyle(color: Colors.grey),
+                //     border: OutlineInputBorder(),
+                //   ),
+                //   itemFilter: (item, query) {
+                //     return item.toLowerCase().contains(query.toLowerCase());
+                //   },
+                //   itemSorter: (a, b) {
+                //     return a.compareTo(b);
+                //   },
+                //   itemSubmitted: (item) {
+                //     setState(() {
+                //       _observationController.text = item;
+                //     });
+                //   },
+                //   itemBuilder: (context, item) {
+                //     return ListTile(
+                //       title: Text(item),
+                //     );
+                //   },
+                // ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+
+                // textField = AutoCompleteTextField<dynamic>(
+                //   controller: _preventiveController,
+                //   key: preventivekey,
+                //   clearOnSubmit: false,
+                //   suggestions: widget.preventiveList,
+                //   decoration: InputDecoration(
+                //     labelText: 'Preventive Action Suggested to Customer',
+                //     labelStyle: TextStyle(color: Colors.grey),
+                //     border: OutlineInputBorder(),
+                //   ),
+                //   itemFilter: (item, query) {
+                //     return item.toLowerCase().contains(query.toLowerCase());
+                //   },
+                //   itemSorter: (a, b) {
+                //     return a.compareTo(b);
+                //   },
+                //   itemSubmitted: (item) {
+                //     setState(() {
+                //       _preventiveController.text = item;
+                //     });
+                //   },
+                //   itemBuilder: (context, item) {
+                //     return ListTile(
+                //       title: Text(item),
+                //     );
+                //   },
+                // ),
+
+                // const SizedBox(
+                //   height: 10,
+                // ),
+
+                // textField = AutoCompleteTextField<dynamic>(
+                //   controller: _curativeController,
+                //   key: curativekey,
+                //   clearOnSubmit: false,
+                //   suggestions: widget.curativeList,
+                //   decoration: InputDecoration(
+                //     labelText: 'Curative Actions from',
+                //     labelStyle: TextStyle(color: Colors.grey),
+                //     border: OutlineInputBorder(),
+                //   ),
+                //   itemFilter: (item, query) {
+                //     return item.toLowerCase().contains(query.toLowerCase());
+                //   },
+                //   itemSorter: (a, b) {
+                //     return a.compareTo(b);
+                //   },
+                //   itemSubmitted: (item) {
+                //     setState(() {
+                //       _curativeController.text = item;
+                //     });
+                //   },
+                //   itemBuilder: (context, item) {
+                //     return ListTile(
+                //       title: Text(item),
+                //     );
+                //   },
+                // ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+
+                // //REVIEW DATE
+                // TextFormField(
+                //   controller:
+                //       reviewdateinput, //editing controller of this TextField
+                //   autovalidateMode: AutovalidateMode.onUserInteraction,
+                //    decoration: const InputDecoration(
+                //     suffixIcon:
+                //         Icon(Icons.calendar_today), //icon of text field
+                //     labelText: "Enter Review Date", //label text of field
+                //     border: OutlineInputBorder(),
+                //   ),
+                //   readOnly: true,
+                //   //set it true, so that user will not able to edit text
+                //   onTap: () async {
+                //     DateTime? pickedDate = await showDatePicker(
+                //         context: context,
+                //         initialDate: DateTime.now(),
+                //         firstDate: DateTime(
+                //             2000), //DateTime.now() - not to allow to choose before today.
+                //         lastDate: DateTime(2101));
+
+                //     if (pickedDate != null) {
+                //       print(
+                //           pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                //       String formattedDate =
+                //           intl.DateFormat('dd-MM-yyyy').format(pickedDate);
+                //       print(
+                //           formattedDate); //formatted date output using intl package =>  2021-03-16
+                //       //you can implement different kind of Date Format here according to your requirement
+
+                //       setState(() {
+                //         reviewdateinput.text =
+                //             formattedDate; //set output date to TextField value.
+                //       });
+                //     } else {
+                //       print("Review Date is not selected");
+                //     }
+                //   },
+                // ),
+
+                // const SizedBox(
+                //   height: 10,
+                // ),
+
+                // //COMPLETION DATE
+
+                // TextFormField(
+                //   controller:
+                //       completiondateinput, //editing controller of this TextField
+                //   autovalidateMode: AutovalidateMode.onUserInteraction,
+                //   decoration: const InputDecoration(
+                //     suffixIcon:
+                //         Icon(Icons.calendar_today), //icon of text field
+                //     labelText: "Enter Completion Date", //label text of field
+                //     border: OutlineInputBorder(),
+                //   ),
+                //   readOnly: true,
+                //   // validator: (value) {
+                //   //   //
+                //   //   if (value == null || value.isEmpty) {
+                //   //     return "Please select Completion Date";
+                //   //   }
+                //   //   return null;
+                //   // }, //set it true, so that user will not able to edit text
+                //   onTap: () async {
+                //     DateTime? pickedDate = await showDatePicker(
+                //         context: context,
+                //         initialDate: DateTime.now(),
+                //         firstDate: DateTime(
+                //             2000), //DateTime.now() - not to allow to choose before today.
+                //         lastDate: DateTime(2101));
+
+                //     if (pickedDate != null) {
+                //       print(
+                //           pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                //       String formattedDate =
+                //           intl.DateFormat('dd-MM-yyyy').format(pickedDate);
+                //       print(
+                //           formattedDate); //formatted date output using intl package =>  2021-03-16
+                //       //you can implement different kind of Date Format here according to your requirement
+
+                //       setState(() {
+                //         completiondateinput.text =
+                //             formattedDate; //set output date to TextField value.
+                //       });
+                //     } else {
+                //       print("Completion Date is not selected");
+                //     }
+                //   },
+                // ),
+                _buildTextField(widget.premises['location']),
+                SizedBox(
+                  height: 10,
+                ),
+                _buildTextField(widget.premises['cleaning']),
+                SizedBox(
+                  height: 10,
+                ),
+                _buildTextField(widget.premises['structural']),
+                SizedBox(
+                  height: 10,
+                ),
+                _buildTextField(widget.premises['access']),
+                SizedBox(
+                  height: 10,
+                ),
+                _buildTextField(widget.premises['infestation']),
+                SizedBox(
+                  height: 10,
+                ),
+                _buildTextField(widget.premises['observations']),
+                SizedBox(
+                  height: 10,
+                ),
+                _buildTextField(widget.premises['curative']),
+                SizedBox(
+                  height: 10,
+                ),
+                _buildTextField(widget.premises['review_date']),
+                SizedBox(
+                  height: 10,
+                ),
+                _buildTextField(widget.premises['completion_date']),
+                // _buildTextField(widget.premises['preventive']),
+
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          ),
+        )));
+  }
+
+  _buildTextField(String title) {
+    return Container(
+        height: 10,
+        width: double.infinity,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+        child: Center(
+          child: Text(title),
+        ));
+  }
+
+  File? _image;
+  final picker = ImagePicker();
+  bool imageselected = false;
+
+  Future getImageFromCamera() async {
+    try {
+      final pickedFile = await picker.pickImage(source: ImageSource.camera);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+          imageselected = true;
+          // imageflag = '1';
+        });
+        // print(_image.path);
+      }
+    } on Exception catch (e) {
+      print("failed to pick image : $e");
+    }
+  }
+
+  Future getImageFromgallery() async {
+    try {
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+          imageselected = true;
+          // imageflag = '1';
+        });
+        // print(_image.path);
+      }
+    } on Exception catch (e) {
+      print("failed to pick image : $e");
+    }
+  }
+
+  final GlobalKey<SignatureState> _signatureKey = GlobalKey<SignatureState>();
+  String? editedImagePath;
+
+  bool _checkbox1 = false;
+  bool _checkbox2 = false;
+
+  void _onCheckboxChanged(bool value, int checkboxNumber) {
+    setState(() {
+      if (checkboxNumber == 1) {
+        _checkbox1 = value;
+        _checkbox2 = !value;
+      } else if (checkboxNumber == 2) {
+        _checkbox2 = value;
+        _checkbox1 = !value;
+      }
+    });
+  }
+
+  GlobalKey _arrowKey = GlobalKey();
+  Color _arrowColor = Colors.red;
+  Offset _arrowPosition = Offset(0.0, 0.0);
+  bool _isDragging = false;
+
+  void _startDragging(BuildContext context) {
+    setState(() {
+      _isDragging = true;
+    });
+  }
+
+  void _stopDragging(BuildContext context) {
+    setState(() {
+      _isDragging = false;
+      // _arrowPosition =  details.
+    });
+  }
+
+  void _dragging(BuildContext context, DragUpdateDetails details) {
+    // Add custom logic while dragging, if needed
+    setState(() {
+      _arrowPosition = details.localPosition - Offset(20, 170);
+    });
+  }
+
+  bool imageSaved = false;
+  List<String> _images = [];
+  int count = 1;
+  Future<String> _saveEditedImage() async {
+    RenderRepaintBoundary boundary =
+        _arrowKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+
+    ui.Image image = await boundary.toImage(pixelRatio: 1.0);
+
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+
+    if (byteData == null) return '';
+
+    final directory = await getTemporaryDirectory();
+    final imagePath = '${directory.path}/edited_image_${count}.png';
+    File(imagePath).writeAsBytesSync(byteData!.buffer.asUint8List());
+    _images.add(imagePath);
+    // print(_images);
+    setState(() {
+      count++;
+      imageSaved = true;
+    });
+    return imagePath;
+  }
+
+  void show() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        duration: const Duration(milliseconds: 700),
+        content: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 25),
+          // padding: EdgeInsets.all(16),
+          height: 40,
+          decoration: const BoxDecoration(
+              color: Color.fromARGB(192, 252, 48, 48),
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: const Center(
+              child: Text(
+            "Please enter the required fields.",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          )),
+        )));
+  }
+
+  // save() async {
+  //   String imagePath = await _saveEditedImage();
+  //   dynamic _store = await {
+  //     // 'images': imagePath.toString(),
+  //     'premises': _checkbox1 ? 'internal' : 'external',
+  //     'location': _locationController.text.toString(),
+  //     'cleaning': _CleaningIssueController.text.toString(),
+  //     'structural': _structuralIssueController.text.toString(),
+  //     'access': _accessIssueController.text.toString(),
+  //     'infestation': _infestationController.text.toString(),
+  //     'obervations': _observationController.text.toString(),
+  //     'preventive': _preventiveController.text.toString(),
+  //     'curative': _curativeController.text.toString(),
+  //     'review_date': reviewdateinput.text.toString(),
+  //     'completion_date': completiondateinput.text.toString()
+  //   };
+
+  //   await resetStrings();
+  //   Navigator.pop(
+  //     context,
+  //     {'store': _store, 'image': imagePath.toString()},
+  //   );
+  // }
+
+  // resetStrings() {
+  //   _image = null;
+  //   imageselected = false;
+  //   imageSaved = false;
+  //   _checkbox1 = false;
+  //   _checkbox2 = false;
+  //   reviewdateinput.text = "";
+  //   completiondateinput.text = "";
+  //   _locationController.text = "";
+  //   _CleaningIssueController.text = "";
+  //   _structuralIssueController.text = "";
+  //   _accessIssueController.text = "";
+  //   _infestationController.text = "";
+  //   _observationController.text = "";
+  //   _preventiveController.text = "";
+  //   _curativeController.text = "";
+  // }
+}

@@ -1,18 +1,23 @@
-import 'package:flutter/material.dart';
+// // ignore_for_file: camel_case_types
 
-class Home_Page extends StatefulWidget {
-  const Home_Page({super.key});
+// import 'package:flutter/material.dart';
+// import 'package:shine_app/pages/form.dart';
+// import 'package:shine_app/widgets/myappbarwidget.dart';
 
-  @override
-  State<Home_Page> createState() => _Home_PageState();
-}
+// class Home_Page extends StatefulWidget {
+//   const Home_Page({super.key});
 
-class _Home_PageState extends State<Home_Page> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-      child: Text("home page"),
-    ));
-  }
-}
+//   @override
+//   State<Home_Page> createState() => _Home_PageState();
+// }
+
+// class _Home_PageState extends State<Home_Page> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Scaffold(
+      // appBar: PreferredSize(
+      //     preferredSize: Size.fromHeight(51), child: MyAppBarWidget()),
+//       body: Main_Form(),
+//     );
+//   }
+// }
